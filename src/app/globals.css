@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "alura";
+  src: url("../../public/Allura-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "unbounded";
+  src: url("../../public/unbounded.ttf") format("truetype");
+}
