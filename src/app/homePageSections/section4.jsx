@@ -61,7 +61,7 @@ const Section4 = () => {
           <div className="flex flex-col items-center  w-full md:w-52 lg:w-[500px]">
             <div className="relative overflow-hidden  shadow-lg">
               <Image
-                src={Img3}
+                src={Img4}
                 alt="MASSLOUG LAMB"
                 className="object-cover md:w-[400px] h-[290px]"
               />

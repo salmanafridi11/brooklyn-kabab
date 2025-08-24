@@ -33,10 +33,10 @@ const AboutSection2 = () => {
           <p className="font-thin text-gray-50 text-sm sm:text-base leading-relaxed sm:leading-7">
             Welcome to our restaurant where we serve the best of Yemeni and{" "}
             <br className="hidden md:block" />
-            Turkish <br className="hidden md:block" />
-            cuisine. Our chefs bring the authentic taste of Yemeni and Turkish
-            food to <br className="hidden md:block" />
-            your plate with their expertise and passion.
+            Turkish cuisine. Our chefs bring the authentic taste of Yemeni and
+            Turkish
+            <br className="hidden md:block" />
+            food to your plate with their expertise and passion.
           </p>
 
           <div>

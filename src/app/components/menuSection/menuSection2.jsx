@@ -183,7 +183,7 @@ const MenuSection2 = () => {
           {menuItems?.map((item, index) => (
             <div
               key={index}
-              className="bg-white/95 md:h-[346px] h-[270px] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+              className="bg-white/95 md:h-[346px] h-[300px] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
               {/* Image Placeholder */}
               <div className=" bg-gradient-to-br from-gray-100 to-gray-200  justify-center ">

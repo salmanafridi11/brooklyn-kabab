@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Img from "../../../../public/36.png";
 import Img1 from "../../../../public/45.png";
 import Img2 from "../../../../public/38.png";
@@ -14,14 +15,14 @@ import Img8 from "../../../../public/44.png";
 
 export default function OrderSection2() {
   const items = [
-    { name: "Grubhub", img: Img1 },
-    { name: "Doordash", img: Img2 },
-    { name: "UberEats", img: Img3 },
-    { name: "Seemless", img: Img4 },
-    { name: "Toasttab", img: Img5 },
-    { name: "Yelp", img: Img6 },
-    { name: "Postmates", img: Img7 },
-    { name: "Slicelife", img: Img8 },
+    { name: "Grubhub", img: Img1, link: "https://www.grubhub.com" },
+    { name: "Doordash", img: Img2, link: "https://www.doordash.com" },
+    { name: "UberEats", img: Img3, link: "https://www.ubereats.com/?utm_source=AdWords_Brand&utm_campaign=CM2551141-search-google-brand_1_-99_US-National_e_web_acq_cpc_en_T92_Generic_BM_ubereats_kwd-111378724377_756813756881_172131283663_b_m&campaign_id=22118132589&adg_id=172131283663&fi_id=&match=b&net=g&dev=m&dev_m=&ad_id=756813756881&cre=756813756881&kwid=kwd-111378724377&kw=ubereats&placement=&tar=&gclsrc=aw.ds&gad_source=1&gad_campaignid=22118132589&gbraid=0AAAAADi-0CgeRS9BhHGyQbzoXCV-RURtY&gclid=Cj0KCQjw8KrFBhDUARIsAMvIApYnGnROjx-8SUuVfVO072R3BFl4JxXJvCKXorQsmyAk96ScTbl9iIYaAualEALw_wcB" },
+    { name: "Seamless", img: Img4, link: "https://www.seamless.com" },
+    { name: "Toasttab", img: Img5, link: "https://order.toasttab.com" },
+    { name: "Yelp", img: Img6, link: "https://www.yelp.com" },
+    { name: "Postmates", img: Img7, link: "https://postmates.com" },
+    { name: "Slicelife", img: Img8, link: "https://www.slicelife.com" },
   ];
 
   return (
@@ -55,25 +56,24 @@ export default function OrderSection2() {
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-6 md:px-0">
           {items.map((it, i) => (
             <div key={i} className="flex flex-col items-center">
-              {/* Image slot (replace the wrapper with your Image src) */}
+              {/* Image slot */}
               <div className="relative w-full aspect-square bg-white/5 border border-white/10">
-                <Image src={it.img} alt={"abc"} fill className="object-cover" />
-
-                <div className="absolute inset-0 flex items-center justify-center text-white/50 text-sm">
-                  Add {it.name} Image
-                </div>
+                <Image src={it.img} alt={it.name} fill className="object-cover" />
+              
               </div>
 
               {/* Label */}
               <div className="mt-4 text-white/90">{it.name}</div>
 
-              {/* Button */}
-              <button
-                type="button"
-                className="mt-3 inline-flex items-center justify-center rounded-sm bg-[#c88c45] px-5 py-4 text-xs  tracking-wider text-white hover:bg-[#b6844b] transition-colors"
-              >
-                ORDER ONLINE
-              </button>
+              {/* Button with Link */}
+              <Link href={it.link} passHref>
+                <button
+                  type="button"
+                  className="mt-3 cursor-pointer inline-flex items-center justify-center rounded-sm bg-[#c88c45] px-5 py-4 text-xs tracking-wider text-white hover:bg-[#b6844b] transition-colors"
+                >
+                  ORDER ONLINE
+                </button>
+              </Link>
             </div>
           ))}
         </div>

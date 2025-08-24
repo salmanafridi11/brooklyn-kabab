@@ -41,7 +41,7 @@ const Section8 = () => {
         </div>
 
         <div className="flex justify-center px-4 sm:px-6 lg:px-8">
-          <div className="relative z-10 w-full max-w-[1000px] py-8 md:py-16">
+          <div className="relative z-10 w-full md:max-w-[800px] lg:max-w-[800px] xl:max-w-[800px] 2xl:max-w-[1000px] py-8 md:py-16">
             {/* Header */}
             <div className="text-center mb-8 md:mb-12 relative">
               {/* Decorative swirls */}

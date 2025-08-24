@@ -41,21 +41,21 @@ const CateringSection2 = () => {
             private party, we offer a wide range of menu options to suit your
             taste and <br className="hidden md:block" />
             dietary preferences.
-            <br className="hidden md:block" />
-            Our team of professional chefs and staff take pride in using only
-            the <br className="hidden md:block" />
-            freshest ingredients and preparing everything from scratch to ensure{" "}
-            <br className="hidden md:block" />
-            quality and taste. We can create customized menus that suit your
-            event <br className="hidden md:block" />
+            
+            Our team of professional chefs and staff take pride in <br className="hidden md:block" />using only
+            the 
+            freshest ingredients and preparing everything from scratch <br className="hidden md:block" /> to ensure{" "}
+ 
+            quality and taste. We can create customized menus that suit your <br className="hidden md:block" />
+            event 
             theme, or you can choose from our pre-designed menu options that
             cater <br className="hidden md:block" />
             to a variety of tastes. We take pride in making every event
             memorable,
-            <br className="hidden md:block" />
+           
             and <br className="hidden md:block" />
             our catering service is no exception. We strive to exceed your{" "}
-            <br className="hidden md:block" />
+            
             expectations
             <br className="hidden md:block" />
             and provide a dining experience that you and your guests will
