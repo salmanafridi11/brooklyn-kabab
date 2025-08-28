@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import menuItems from "../lib/menuItems";
@@ -15,7 +15,7 @@ import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
 import emailjs from "@emailjs/browser";
 
-export default function CartPage() {
+function CartPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [cart, setCart] = useState([]);
@@ -23,7 +23,7 @@ export default function CartPage() {
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
 
   useEffect(() => {
-    // load cart from localStorage ONLY on mount
+    // Load cart from localStorage ONLY on mount
     try {
       const raw = localStorage.getItem("bk_menu_cart");
       const parsed = raw ? JSON.parse(raw) : [];
@@ -38,23 +38,23 @@ export default function CartPage() {
 
   // Check for successful payment and send confirmation email
   useEffect(() => {
-    const success = searchParams.get('success');
-    const sessionId = searchParams.get('session_id');
-    
-    if (success === 'true' && sessionId) {
-      console.log(success,"success ")
-      console.log(sessionId,"sessionId ")
+    const success = searchParams.get("success");
+    const sessionId = searchParams.get("session_id");
+
+    if (success === "true" && sessionId) {
+      console.log(success, "success");
+      console.log(sessionId, "sessionId");
 
       // Get the order data from localStorage (stored before checkout)
-      const orderData = localStorage.getItem('checkout_order_data');
-      console.log(orderData,"prderData")
+      const orderData = localStorage.getItem("checkout_order_data");
+      console.log(orderData, "orderData");
       if (orderData) {
         const parsedOrderData = JSON.parse(orderData);
         sendOrderConfirmationEmail(parsedOrderData);
-        
+
         // Clear the stored order data and cart
-        localStorage.removeItem('checkout_order_data');
-        localStorage.removeItem('bk_menu_cart');
+        localStorage.removeItem("checkout_order_data");
+        localStorage.removeItem("bk_menu_cart");
         setCart([]);
       }
     }
@@ -63,34 +63,36 @@ export default function CartPage() {
   const sendOrderConfirmationEmail = async (orderData) => {
     try {
       // EmailJS configuration - replace with your actual credentials
-      const serviceId = 'service_paetrdp';
-      const templateId = 'template_rieg2wv'; // Different template for order confirmation
-      const publicKey = 'SX_qc7I7aoXuZ2rte';
+      const serviceId = "service_paetrdp";
+      const templateId = "template_rieg2wv"; // Different template for order confirmation
+      const publicKey = "SX_qc7I7aoXuZ2rte";
 
       // Format order items for email
-      const orderItemsText = orderData.items.map(item => 
-        `${item.name} ${item.selectedOption ? `(${item.selectedOption})` : ''} - Qty: ${item.qty} - $${(item.price * item.qty).toFixed(2)}`
-      ).join('\n');
+      const orderItemsText = orderData.items.map(
+        (item) =>
+          `${item.name} ${
+            item.selectedOption ? `(${item.selectedOption})` : ""
+          } - Qty: ${item.qty} - $${(item.price * item.qty).toFixed(2)}`
+      ).join("\n");
 
       const emailData = {
-        to_email: 'restaurant@example.com', // Restaurant email
-        customer_email: 'customer@example.com', // You might want to collect this during checkout
-        order_id: orderData.sessionId || 'N/A',
+        to_email: "restaurant@example.com", // Restaurant email
+        customer_email: "customer@example.com", // You might want to collect this during checkout
+        order_id: orderData.sessionId || "N/A",
         order_date: new Date().toLocaleString(),
         order_items: orderItemsText,
         total_amount: `$${orderData.total.toFixed(2)}`,
         total_items: orderData.totalItems,
-        payment_status: 'Completed'
+        payment_status: "Completed",
       };
 
       await emailjs.send(serviceId, templateId, emailData, publicKey);
-      console.log('Order confirmation email sent successfully');
-      
+      console.log("Order confirmation email sent successfully");
+
       // Show success message to user
-      alert('Order confirmed! Confirmation email has been sent.');
-      
+      alert("Order confirmed! Confirmation email has been sent.");
     } catch (error) {
-      console.error('Failed to send order confirmation email:', error);
+      console.error("Failed to send order confirmation email:", error);
       // Don't show error to user as the payment was successful
     }
   };
@@ -199,24 +201,24 @@ export default function CartPage() {
 
       // Prepare order data for email (store before checkout)
       const orderData = {
-        items: cart.map(entry => {
+        items: cart.map((entry) => {
           const item = findItemById(entry.id);
           return {
             id: entry.id,
-            name: item?.name || 'Unknown Item',
+            name: item?.name || "Unknown Item",
             selectedOption: entry.selectedOption,
             qty: entry.qty,
             price: entry.price,
-            category: item?.category
+            category: item?.category,
           };
         }),
         total: subtotal,
         totalItems: cart.reduce((sum, entry) => sum + entry.qty, 0),
-        orderDate: new Date().toISOString()
+        orderDate: new Date().toISOString(),
       };
 
       // Store order data in localStorage for after payment success
-      localStorage.setItem('checkout_order_data', JSON.stringify(orderData));
+      localStorage.setItem("checkout_order_data", JSON.stringify(orderData));
 
       // POST cart to server using axios
       const response = await axios.post(
@@ -241,7 +243,7 @@ export default function CartPage() {
 
       // Add session ID to order data
       const updatedOrderData = { ...orderData, sessionId };
-      localStorage.setItem('checkout_order_data', JSON.stringify(updatedOrderData));
+      localStorage.setItem("checkout_order_data", JSON.stringify(updatedOrderData));
 
       // Load Stripe.js and redirect
       const stripe = await loadStripe(
@@ -464,7 +466,7 @@ export default function CartPage() {
 
                         <button
                           onClick={() => removeItem(entry.cartItemId)}
-                          className="cursor-pointer text-sm text-red-500 hover:text-red-700 hover:underline transition-colors  bg-red-50 hover:bg-red-100 px-3 py-1 rounded-lg"
+                          className="cursor-pointer text-sm text-red-500 hover:text-red-700 hover:underline transition-colors bg-red-50 hover:bg-red-100 px-3 py-1 rounded-lg"
                         >
                           Remove
                         </button>
@@ -498,7 +500,7 @@ export default function CartPage() {
                   className="text-xs cursor-pointer flex gap-3 items-center px-8 py-3 bg-gradient-to-r from-[#C98D45] to-[#B8935A] text-white rounded-xl hover:from-[#B8935A] hover:to-[#A67B47] transition-all duration-300 font-semibold shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <MdOutlineShoppingCartCheckout className="text-xl" />
-                  {isCheckoutLoading ? 'Processing...' : 'Proceed to Checkout'}
+                  {isCheckoutLoading ? "Processing..." : "Proceed to Checkout"}
                 </button>
               </div>
             </div>
@@ -506,5 +508,13 @@ export default function CartPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function CartPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CartPageContent />
+    </Suspense>
   );
 }

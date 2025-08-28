@@ -1,11 +1,11 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import emailjs from "@emailjs/browser";
 
-export default function SuccessPage() {
+function SuccessPageContent() {
   const searchParams = useSearchParams();
   const [sessionId, setSessionId] = useState("");
   const [emailSent, setEmailSent] = useState(false);
@@ -14,32 +14,28 @@ export default function SuccessPage() {
     const id = searchParams.get("session_id");
     if (id) {
       setSessionId(id);
-      // Send email when sessionId is received
       sendOrderConfirmationEmail(id);
     }
   }, [searchParams]);
 
   const sendOrderConfirmationEmail = async (sessionId) => {
     try {
-      // EmailJS configuration - replace with your actual credentials
       const serviceId = 'service_72ihri8';
       const templateId = 'template_5z0o5ce';
       const publicKey = 'KqCvksIHGFFtlqAry';
 
-      // Get the order data from localStorage (stored before checkout)
       const orderData = localStorage.getItem('checkout_order_data');
       
       if (orderData) {
         const parsedOrderData = JSON.parse(orderData);
         
-        // Format order items for email
         const orderItemsText = parsedOrderData.items.map(item => 
           `${item.name} ${item.selectedOption ? `(${item.selectedOption})` : ''} - Qty: ${item.qty} - $${(item.price * item.qty).toFixed(2)}`
         ).join('\n');
 
         const emailData = {
-          to_email: 'restaurant@example.com', // Restaurant email
-          customer_email: 'customer@example.com', // You might want to collect this during checkout
+          to_email: 'restaurant@example.com',
+          customer_email: 'customer@example.com',
           order_id: sessionId || 'N/A',
           order_date: new Date().toLocaleString(),
           order_items: orderItemsText,
@@ -52,7 +48,6 @@ export default function SuccessPage() {
         console.log('Order confirmation email sent successfully');
         setEmailSent(true);
         
-        // Clear the stored order data and cart
         localStorage.removeItem('checkout_order_data');
         localStorage.removeItem('bk_menu_cart');
       }
@@ -76,7 +71,6 @@ export default function SuccessPage() {
             ? "An email with your order details has been sent to the restaurant." 
             : "Processing your order details..."}
         </p>
-     
         <Link
           href="/"
           className="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 transition"
@@ -85,5 +79,13 @@ export default function SuccessPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SuccessPageContent />
+    </Suspense>
   );
 }
