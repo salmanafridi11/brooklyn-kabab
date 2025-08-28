@@ -1,7 +1,9 @@
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
-console.log("STRIPE_SECRET_KEY:", process.env.STRIPE_SECRET_KEY);
-const stripe = new Stripe("sk_test_51S02wHKV2NPxVLLTqk74gPTHkMsJI5ta7LSxs0GGETTuSAGABkroWokCGuhcYcV6ErGzYqIfXSYLGuusflAjah4g00CUQRxRzo", {
+
+
+const key="sk_test_51S02wHKV2NPxVLLTqk74gPTHkMsJI5ta7LSxs0GGETTuSAGABkroWokCGuhcYcV6ErGzYqIfXSYLGuusflAjah4g00CUQRxRzo"
+const stripe = new Stripe(key, {
   apiVersion: "2022-11-15",
 });
 
