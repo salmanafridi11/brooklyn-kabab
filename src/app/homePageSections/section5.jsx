@@ -1,24 +1,66 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import emailjs from "@emailjs/browser";
 import Img from "../../../public/19.png";
 import { FaCalendarAlt, FaClock, FaUsers, FaBaby } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const Section5 = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    persons: "",
-    kids: "",
-    date: "",
-    time: "",
-    message: "",
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm();
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
+
+  // Validate time is between 12 PM (12:00) and 2 AM (02:00)
+  const validateTime = (time) => {
+    if (!time) return "Time is required";
+
+    const [hours, minutes] = time.split(":").map(Number);
+    const timeIn24 = hours * 100 + minutes;
+
+    // Valid times: 12:00 PM to 11:59 PM (1200-2359) OR 12:00 AM to 2:00 AM (0000-0200)
+    if (
+      (timeIn24 >= 1200 && timeIn24 <= 2359) ||
+      (timeIn24 >= 0 && timeIn24 <= 200)
+    ) {
+      return true;
+    }
+
+    return "Time must be between 12:00 PM and 2:00 AM";
   };
+
+  const onSubmit = async (data) => {
+    try {
+      // EmailJS configuration - replace with your actual service ID, template ID, and public key
+      const serviceId = "service_72ihri8";
+      const templateId = "template_1llvqvh";
+      const publicKey = "KqCvksIHGFFtlqAry";
+
+      // Format the data for email template
+      const emailData = {
+        customer_name: data.name,
+        number_of_persons: data.persons,
+        reservation_date: data.date,
+        reservation_time: data.time,
+        special_message: data.message || "No special message",
+      };
+
+      await emailjs.send(serviceId, templateId, emailData, publicKey);
+
+      toast.success("Reservation request sent successfully!");
+      reset(); // Reset form after successful submission
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      toast.error("Failed to send reservation request. Please try again.");
+    }
+  };
+
   return (
     <div
       className="relative min-h-screen bg-gray-900 overflow-hidden py-16"
@@ -69,43 +111,57 @@ const Section5 = () => {
             </h1>
 
             {/* Form */}
-            <div className="space-y-3 sm:space-y-4">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-3 sm:space-y-4"
+            >
               {/* Name field */}
               <div className="relative">
                 <input
                   type="text"
-                  name="name"
                   placeholder="Your Name"
-                  value={formData.name}
-                  onChange={handleInputChange}
+                  {...register("name", {
+                    required: "Name is required",
+                    minLength: {
+                      value: 2,
+                      message: "Name must be at least 2 characters",
+                    },
+                  })}
                   className="w-full px-4 py-3 sm:py-4 bg-white text-gray-800 placeholder-gray-500 border-none rounded-none text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
+                {errors.name && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
 
-              {/* Person and Kids row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              {/* Person field */}
+              <div className="">
                 <div className="relative">
                   <FaUsers className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
                   <input
-                    type="text"
-                    name="persons"
+                    type="number"
                     placeholder="2 Person"
-                    value={formData.persons}
-                    onChange={handleInputChange}
+                    {...register("persons", {
+                      required: "Number of persons is required",
+                      min: {
+                        value: 1,
+                        message: "At least 1 person required",
+                      },
+                      max: {
+                        value: 20,
+                        message: "Maximum 20 persons allowed",
+                      },
+                    })}
                     className="w-full pl-12 pr-4 py-3 sm:py-4 bg-white text-gray-800 placeholder-gray-500 border-none rounded-none text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                   />
                 </div>
-                <div className="relative">
-                  <FaBaby className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
-                  <input
-                    type="text"
-                    name="kids"
-                    placeholder="3 Kids"
-                    value={formData.kids}
-                    onChange={handleInputChange}
-                    className="w-full pl-12 pr-4 py-3 sm:py-4 bg-white text-gray-800 placeholder-gray-500 border-none rounded-none text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
-                  />
-                </div>
+                {errors.persons && (
+                  <p className="text-red-400 text-sm mt-1">
+                    {errors.persons.message}
+                  </p>
+                )}
               </div>
 
               {/* Date and Time row */}
@@ -114,42 +170,61 @@ const Section5 = () => {
                   <FaCalendarAlt className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
                   <input
                     type="date"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleInputChange}
+                    {...register("date", {
+                      required: "Date is required",
+                      validate: (value) => {
+                        if (value < today) {
+                          return "Date cannot be in the past";
+                        }
+                        return true;
+                      },
+                    })}
+                    min={today}
                     className="md:w-full w-[400px] pl-12 pr-4 py-3 sm:py-4 bg-white text-gray-800 border-none rounded-none text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                   />
+                  {errors.date && (
+                    <p className="text-red-400 text-sm my-1 absolute">
+                      {errors.date.message}
+                    </p>
+                  )}
                 </div>
                 <div className="relative">
                   <FaClock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
                   <input
                     type="time"
-                    name="time"
                     placeholder="07:00 PM"
-                    value={formData.time}
-                    onChange={handleInputChange}
+                    {...register("time", {
+                      validate: validateTime,
+                    })}
                     className="md:w-full w-[400px] pl-12 pr-4 py-3 sm:py-4 bg-white text-gray-800 placeholder-gray-500 border-none rounded-none text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                   />
+                  {errors.time && (
+                    <p className="text-red-400 text-sm mt-1 absolute">
+                      {errors.time.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
               {/* Message field */}
-              <div className="relative">
+              <div className="relative mt-7">
                 <textarea
-                  name="message"
                   placeholder="Special Message"
                   rows={4}
-                  value={formData.message}
-                  onChange={handleInputChange}
+                  {...register("message")}
                   className="w-full px-4 py-3 sm:py-4 bg-white text-gray-800 placeholder-gray-500 border-none rounded-none text-base sm:text-lg resize-none focus:outline-none focus:ring-2 focus:ring-amber-500"
                 />
               </div>
 
               {/* Submit button */}
-              <button className="bg-[#C98D45] hover:bg-amber-700 text-white font-normal px-6 sm:px-8 py-3 sm:py-4  text-base sm:text-lg transition-colors duration-300 transform hover:scale-105">
-                Confirm Reservation
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-[#C98D45] cursor-pointer hover:bg-amber-700 text-white font-normal px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg transition-colors duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? "Sending..." : "Confirm Reservation"}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       </div>

@@ -34,7 +34,7 @@ const ContactSection2 = () => {
               <div className="flex flex-col items-center">
                 <FiClock className="text-[#d09a5c] text-3xl mb-2" />
                 <div className="font-semibold tracking-wide text-white">Time</div>
-                <div className="text-sm text-white/90">10:00am to 2:00am</div>
+                <div className="text-sm text-white/90">12:00pm to 2:00am</div>
               </div>
             </div>
           </div>

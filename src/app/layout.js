@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "./components/header";
 import Footer from "./components/footer/footer";
+import { ToastContainer } from "react-toastify";
 
 export const metadata = {
   title: "Brooklyn Kabab",
@@ -15,6 +16,7 @@ export default function RootLayout({ children }) {
         <Header />
         {children}
         <Footer />
+         <ToastContainer />
       </body>
     </html>
   );

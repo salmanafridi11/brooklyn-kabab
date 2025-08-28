@@ -1,215 +1,356 @@
 "use client";
 
+import React, { useMemo, useState } from "react";
 import Image from "next/image";
-import React from "react";
-import { Great_Vibes } from "next/font/google";
-import { FiChevronRight } from "react-icons/fi";
-import Img from "../../../../public/68.png";
-import Img1 from "../../../../public/69.png";
-import Img2 from "../../../../public/70.png";
-import Img3 from "../../../../public/71.png";
-import Img4 from "../../../../public/72.png";
-import Img5 from "../../../../public/73.png";
-import Img6 from "../../../../public/74.png";
-import Img7 from "../../../../public/75.png";
-import Img8 from "../../../../public/76.png";
-import Img9 from "../../../../public/77.png";
-import Img10 from "../../../../public/78.png";
-import Img11 from "../../../../public/79.png";
-import Img12 from "../../../../public/80.png";
-import Img13 from "../../../../public/81.png";
-import Img14 from "../../../../public/82.png";
-import Img15 from "../../../../public/83.png";
-import Img16 from "../../../../public/84.png";
-import Img17 from "../../../../public/85.png";
-import Img18 from "../../../../public/86.png";
-import Img19 from "../../../../public/87.png";
-import Img20 from "../../../../public/88.png";
-import Img21 from "../../../../public/89.png";
-import Img22 from "../../../../public/90.png";
-import Img23 from "../../../../public/91.png";
-import Img24 from "../../../../public/92.png";
-import Img25 from "../../../../public/93.png";
-import Img26 from "../../../../public/94.png";
-import Img27 from "../../../../public/95.png";
-import Img28 from "../../../../public/96.png";
-import Img29 from "../../../../public/97.png";
-import Img30 from "../../../../public/98.png";
-import Img31 from "../../../../public/99.png";
-import Img32 from "../../../../public/100.png";
-import Img33 from "../../../../public/101.png";
-import Img34 from "../../../../public/102.png";
-import Img35 from "../../../../public/103.png";
-import Img36 from "../../../../public/104.png";
-import Img37 from "../../../../public/105.png";
-import Img38 from "../../../../public/106.png";
-import Img39 from "../../../../public/107.png";
-import Img40 from "../../../../public/108.png";
-import Img41 from "../../../../public/109.png";
-import Img42 from "../../../../public/110.png";
-import Img43 from "../../../../public/111.png";
-import Img44 from "../../../../public/112.png";
-import Img45 from "../../../../public/113.png";
-import Img46 from "../../../../public/114.png";
-import Img47 from "../../../../public/115.png";
-import Img48 from "../../../../public/116.png";
-import Img49 from "../../../../public/117.png";
-import Img50 from "../../../../public/63.png";
-import Img51 from "../../../../public/64.png";
+import { useRouter } from "next/navigation";
+import menuItems from "../../lib/menuItems"; // adjust path if needed
+import { FaShoppingCart } from "react-icons/fa";
 
-
-const menuItems = [
-  { name: "Cheese Burger", img: Img2 },
-  { name: "Margherita Pizza", img: Img3 },
-  { name: "Sprich Sandwich", img: Img4 },
-  { name: "Chicken Shawarma", img: Img5 },
-  { name: "Falafel Beans", img: Img6 },
-  { name: "Hummus", img: Img7 },
-  { name: "Sku Pasta & Pomice", img: Img8 },
-  { name: "Soy Azmaneleri & Tomato", img: Img9 },
-  { name: "Lamm Döner", img: Img10 },
-  { name: "Vegetarisch Pizza & Oliv", img: Img11 },
-  { name: "Gıozleme", img: Img12 },
-  { name: "Vezirtoprak Pizza", img: Img13 },
-  { name: "Doner im Lamm-Direk", img: Img14 },
-  { name: "Gemüse Suppe", img: Img15 },
-  { name: "Chicken Salad", img: Img16 },
-  { name: "Turkey Burger", img: Img17 },
-  { name: "Falafel Rinde", img: Img18 },
-  { name: "Döner Kebab", img: Img19 },
-  { name: "Gıozleme Special", img: Img20 },
-  { name: "Döner Teller", img: Img21 },
-  { name: "Döner Plate", img: Img22 },
-  { name: "Coffee & Tea", img: Img23 },
-  { name: "Döner Box", img: Img24 },
-  { name: "Mozzarella Sandwich", img: Img25 },
-  { name: "Chicken Döner", img: Img26 },
-  { name: "Kıottos & Fish", img: Img27 },
-  { name: "Sıt Fish & Meat", img: Img28 },
-  { name: "Chicken & Fries", img: Img29 },
-  { name: "Spezialitäten", img: Img30 },
-  { name: "Spice & Herb", img: Img31 },
-  { name: "Döner Special", img: Img32 },
-  { name: "Chips mit Chicken", img: Img33 },
-  { name: "Fish & Meat Special", img: Img34 },
-  { name: "Döner Special Mix", img: Img35 },
-  { name: "Köfte Sandwich Spiez", img: Img36 },
-  { name: "Turkey Salad", img: Img37 },
-  { name: "Healthy Salad Cocktail", img: Img38 },
-  { name: "Gıch & Vegetables", img: Img39 },
-  { name: "Tea & Sauce", img: Img40 },
-  { name: "Lamar Pomegranate Drink", img: Img41 },
-  { name: "Grilled Fish", img: Img42 },
-  { name: "Döner Special", img: Img43 },
-  { name: "Rice & Chicken Stew", img: Img44 },
-  { name: "Wings & Serving Spiez", img: Img45 },
-  { name: "Chips & Pepsi", img: Img46 },
-  { name: "Chicken Wings", img: Img47 },
-  { name: "Döner Special", img: Img48 },
-  { name: "Mixed Vegetables", img: Img49 },
+const categories = [
+  "All",
+  "Espresso",
+  "Tea",
+  "Soft Drink",
+  "Sandwiches",
+  "Appetizers",
+  "Pizza",
+  "Entrees",
+  "Grilled",
+  "Rotisserie",
+  "Family Meal",
+  "Salads",
+  "Sides",
+  "Beverages",
+  "Desserts",
+  "Breakfast",
+  "Soups",
 ];
 
-const MenuSection2 = () => {
+export default function MenuSection2() {
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedOptions, setSelectedOptions] = useState({}); // { [itemId]: optionLabel }
+
+  const PREVIEW_CHARS = 300;
+
+  // localStorage helpers
+  const readCart = () => {
+    try {
+      const raw = localStorage.getItem("bk_menu_cart");
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      console.warn("readCart error", e);
+      return [];
+    }
+  };
+
+  const writeCart = (cart) => {
+    try {
+      localStorage.setItem("bk_menu_cart", JSON.stringify(cart));
+    } catch (e) {
+      console.warn("writeCart error", e);
+    }
+  };
+
+  // determine price options for an item
+  const getItemOptions = (item) => {
+    const options = [];
+
+    if (item.category === "Sandwiches" && item.pitaPrice != null && item.wrapPrice != null) {
+      options.push({ label: "Pita", price: item.price });
+      options.push({ label: "Wrap", price: item.pitaPrice });
+      options.push({ label: "Hero", price: item.wrapPrice });
+    } else if (item.lambPrice != null) {
+      options.push({ label: "Chicken", price: item.price });
+      options.push({ label: "Beef/Lamb", price: item.lambPrice });
+    } else if (item.largePrice != null) {
+      options.push({ label: "Small", price: item.price });
+      options.push({ label: "Large", price: item.largePrice });
+    } else if (item.wholePrice != null) {
+      options.push({ label: "Half", price: item.price });
+      options.push({ label: "Whole", price: item.wholePrice });
+    } else if (item.singlePrice != null && item.doublePrice != null) {
+      options.push({ label: "Single", price: item.singlePrice });
+      options.push({ label: "Double", price: item.doublePrice });
+    } else if (item.madara != null) {
+      options.push({ label: "Regular", price: item.price });
+      options.push({ label: "Madara", price: item.madara });
+    }
+
+    return options;
+  };
+
+  // Add to cart: creates cartItemId combining id + option (if any)
+  const addToCart = (item) => {
+    if (!item?.id) {
+      console.warn("Item missing id", item);
+      return;
+    }
+
+    const options = getItemOptions(item);
+    let selectedOptionLabel = null;
+    let selectedPrice = Number(item.price ?? 0);
+
+    if (options.length > 0) {
+      const chosen = selectedOptions[item.id] ?? options[0].label;
+      const optionData = options.find((o) => o.label === chosen) ?? options[0];
+      selectedOptionLabel = optionData.label;
+      selectedPrice = Number(optionData.price ?? selectedPrice);
+    }
+
+    const cart = readCart();
+
+    // create unique cart item id to allow same item with different options
+    const cartItemId = selectedOptionLabel
+      ? `${item.id}-${selectedOptionLabel.toString().toLowerCase().replace(/\s+/g, "-")}`
+      : String(item.id);
+
+    const existing = cart.find((c) => c.cartItemId === cartItemId);
+
+    let next;
+    if (existing) {
+      next = cart.map((c) =>
+        c.cartItemId === cartItemId ? { ...c, qty: c.qty + 1 } : c
+      );
+    } else {
+      next = [
+        ...cart,
+        {
+          id: String(item.id),
+          cartItemId,
+          selectedOption: selectedOptionLabel,
+          price: selectedPrice,
+          qty: 1,
+          name: item.name,
+        },
+      ];
+    }
+
+    writeCart(next);
+    router.push("/cart");
+  };
+
+  // format price display (returns JSX) — use div not p to avoid invalid nesting
+  const formatPrice = (item) => {
+    if (!item) return null;
+
+    if (item.category === "Sandwiches" && item.pitaPrice != null && item.wrapPrice != null) {
+      return (
+        <div className="space-y-1 text-xs">
+          <div className="flex justify-between"><span>Pita</span><span>${Number(item.price).toFixed(2)}</span></div>
+          <div className="flex justify-between"><span>Wrap</span><span>${Number(item.pitaPrice).toFixed(2)}</span></div>
+          <div className="flex justify-between"><span>Hero</span><span>${Number(item.wrapPrice).toFixed(2)}</span></div>
+        </div>
+      );
+    } else if (item.lambPrice != null) {
+      return (
+        <div className="space-y-1 text-xs">
+          <div className="flex justify-between"><span>Chicken</span><span>${Number(item.price).toFixed(2)}</span></div>
+          <div className="flex justify-between"><span>Beef/Lamb</span><span>${Number(item.lambPrice).toFixed(2)}</span></div>
+        </div>
+      );
+    } else if (item.largePrice != null) {
+      return (
+        <div className="space-y-1 text-xs">
+          <div className="flex justify-between"><span>Small</span><span>${Number(item.price).toFixed(2)}</span></div>
+          <div className="flex justify-between"><span>Large</span><span>${Number(item.largePrice).toFixed(2)}</span></div>
+        </div>
+      );
+    } else if (item.wholePrice != null) {
+      return (
+        <div className="space-y-1 text-xs">
+          <div className="flex justify-between"><span>Half</span><span>${Number(item.price).toFixed(2)}</span></div>
+          <div className="flex justify-between"><span>Whole</span><span>${Number(item.wholePrice).toFixed(2)}</span></div>
+        </div>
+      );
+    } else if (item.singlePrice != null && item.doublePrice != null) {
+      return (
+        <div className="space-y-1 text-xs">
+          <div className="flex justify-between"><span>Single</span><span>${Number(item.singlePrice).toFixed(2)}</span></div>
+          <div className="flex justify-between"><span>Double</span><span>${Number(item.doublePrice).toFixed(2)}</span></div>
+        </div>
+      );
+    } else if (item.madara != null) {
+      return (
+        <div className="space-y-1 text-xs">
+          <div className="flex justify-between"><span>Regular</span><span>${Number(item.price).toFixed(2)}</span></div>
+          <div className="flex justify-between"><span>Madara</span><span>${Number(item.madara).toFixed(2)}</span></div>
+        </div>
+      );
+    }
+
+    return <div className="text-xs">${Number(item.price ?? 0).toFixed(2)}</div>;
+  };
+
+  const filteredItems = useMemo(() => {
+    return menuItems.filter((item) => {
+      const matchesSearch =
+        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (item.description || "").toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        selectedCategory === "All" || item.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchTerm, selectedCategory]);
+
   return (
-    <div
-      className="min-h-screen  bg-[#f5eadc] relative overflow-hidden"
-      style={{ fontFamily: "unbounded" }}
-    >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 ">
-        {/* Left triangular pattern */}
-        <div className="absolute left-0 top-0 h-full">
-          <Image className="h-full hidden md:block" src={Img} alt="left" />
-          {/* <Image className=" block md:hidden min-h-screen" src={Img50} alt="left" /> */}
-
-        </div>
-
-        {/* Right triangular pattern */}
-        <div className="absolute right-0 top-0  h-full">
-          <Image className="h-full hidden md:block" src={Img1} alt="left" />
-          {/* <Image className="block md:hidden h-full" src={Img51} alt="left" /> */}
-
-        </div>
-      </div>
-
+    <div className="min-h-screen bg-[#f5eadc] relative overflow-hidden" style={{ fontFamily: "unbounded" }}>
       <div className="relative z-10 max-w-6xl mx-auto px-8 py-8">
-        {/* Header */}
-        <div className="text-center mb-8  rounded-lg p-6 mx-4">
-          <h1 className="text-2xl md:text-[32px] font-normal text-black mb-3">
-            Our Menu
-          </h1>
+        <div className="text-center mb-8 rounded-lg p-6 mx-4">
+          <h1 className="text-2xl md:text-[32px] font-normal text-black mb-3">Our Menu</h1>
           <p className="text-sm md:text-[32px] text-black mx-auto font-normal leading-relaxed">
-            Explore Our Selection Of Authentic Yemeni And Turkish Dishes,
-            Crafted To Offer You The Best Of Both Rich Traditions.
+            Explore Our Selection Of Authentic Yemeni And Turkish Dishes, Crafted To Offer You The Best Of Both Rich Traditions.
           </p>
 
-          {/* Search and Filter Buttons */}
-          <div className="flex flex-wrap justify-center gap-3 mt-6">
+          <div className="flex flex-wrap justify-start gap-3 mt-6 items-center">
             <div className="flex items-center bg-white rounded-full px-4 py-2 min-w-[200px]">
-              <svg
-                className="w-4 h-4 text-gray-500 mr-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
+              <svg className="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
                 type="text"
-                placeholder="Search..."
-                className="outline-none flex-1 py-3 text-sm bg-white w-[400px]"
+                placeholder="Search menu items..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="outline-none flex-1 py-2 text-sm bg-white w-[400px]"
               />
             </div>
-            <button className="bg-[#C98D45] text-white px-12 py-2 rounded-full text-sm hover:bg-[#B8935A] transition-colors">
-              All
-            </button>
-            <button className="bg-transparent border-[#C98D45] border-1 text-[#C98D45]  px-4 py-2 rounded-full text-sm hover:bg-[#B8935A] hover:text-white transition-colors">
-              Appetizers
-            </button>
 
-            <button className="bg-transparent border-[#C98D45] border-1 text-[#C98D45]  px-4 py-2 rounded-full text-sm hover:bg-[#B8935A] hover:text-white transition-colors">
-              Main Course
-            </button>
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                  selectedCategory === category
+                    ? "bg-[#C98D45] text-white"
+                    : "bg-transparent border border-[#C98D45] cursor-pointer text-[#C98D45] hover:bg-[#B8935A] hover:text-white"
+                }`}
+              >
+                {category}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Menu Grid */}
+        <div className="text-center mb-4">
+          <p className="text-gray-600">
+            Showing {filteredItems.length} item{filteredItems.length !== 1 ? "s" : ""}
+            {selectedCategory !== "All" && ` in ${selectedCategory}`}
+            {searchTerm && ` matching "${searchTerm}"`}
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 md:gap-4 gap-8 px-4">
-          {menuItems?.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white/95 md:h-[346px] h-[300px] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-            >
-              {/* Image Placeholder */}
-              <div className=" bg-gradient-to-br from-gray-100 to-gray-200  justify-center ">
-                <div className="text-center ">
-                  <div className="  rounded-full flex items-center justify-center  mb-2">
-                    <Image className="w-full " src={item.img} alt="menu" />
+          {filteredItems.map((item) => (
+            <div key={item.id} className="bg-white/95 md:h-[500px] h-[480px] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="bg-gradient-to-br from-gray-100 to-gray-200 justify-center h-48">
+                <div className="text-center">
+                  <div className="rounded-full flex items-center justify-center mb-2">
+                    <Image
+                      className="w-full h-[200px] object-cover"
+                      src={item.img}
+                      alt={item.name}
+                      width={400}
+                      height={200}
+                    />
                   </div>
                 </div>
               </div>
 
-              {/* Overlay for item name on image (like original) */}
-              <div className="relative -mt-2 z-10  mb-4">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                <div className="uppercase absolute bottom-0 left-0 right-0 bg-[#c98d45]/60 text-white font-normal py-3 px-4 text-center">
-                  {item.name}
+              <div className="p-4 flex flex-col h-[300px]">
+                <span className="inline-block bg-[#C98D45] text-white text-xs px-2 py-1 rounded-full mb-2 self-start">
+                  {item.category}
+                </span>
+
+                <h3 className="font-semibold text-sm mb-2 text-gray-800 uppercase">{item.name}</h3>
+
+                {item.description && (
+                  <div className="mb-3 flex-grow text-sm text-gray-600">
+                    {item.description.length > PREVIEW_CHARS
+                      ? `${item.description.substring(0, PREVIEW_CHARS)}...`
+                      : item.description}
+
+                    {item.description.length > PREVIEW_CHARS && (
+                      <button
+                        onClick={() => alert(item.description)}
+                        className="ml-2 text-[#C98D45] underline text-xs"
+                      >
+                        Read more
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                <div className="mt-auto space-y-3">
+                  <div className="text-[#C98D45] font-normal text-xs">
+                    {formatPrice(item)}
+                  </div>
+
+                  {/* Option chips (if item has options) */}
+                  {(() => {
+                    const options = getItemOptions(item);
+                    if (options.length > 0) {
+                      const current = selectedOptions[item.id] ?? options[0].label;
+                      return (
+                        <div className="mb-3">
+                          <div className="text-xs text-gray-600 mb-2 font-medium">Choose option:</div>
+                          <div className="flex flex-wrap gap-2">
+                            {options.map((opt) => (
+                              <button
+                                key={opt.label}
+                                onClick={() =>
+                                  setSelectedOptions((prev) => ({ ...prev, [item.id]: opt.label }))
+                                }
+                                className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-200 border ${
+                                  current === opt.label
+                                    ? "bg-[#C98D45] text-white border-[#C98D45] shadow-md"
+                                    : "bg-white text-[#C98D45] border-[#C98D45] hover:bg-[#C98D45] hover:text-white"
+                                }`}
+                              >
+                                {opt.label}
+                                {/* <span className="ml-1 text-xs opacity-90">
+                                  ${Number(opt.price).toFixed(2)}
+                                </span> */}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
+
+                  <button
+                    onClick={() => addToCart(item)}
+                    className="w-full cursor-pointer bg-[#C98D45] text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-[#B8935A] transition-colors duration-200 flex items-center justify-center gap-2"
+                  >
+                <FaShoppingCart />
+                    Add to Cart
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Bottom spacing */}
+        {filteredItems.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No items found matching your search criteria.</p>
+            <button
+              onClick={() => {
+                setSearchTerm("");
+                setSelectedCategory("All");
+              }}
+              className="mt-4 bg-[#C98D45] text-white px-6 py-2 rounded-full hover:bg-[#B8935A] transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
+        )}
+
         <div className="h-8"></div>
       </div>
     </div>
   );
-};
-
-export default MenuSection2;
+}

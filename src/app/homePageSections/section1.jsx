@@ -2,9 +2,9 @@
 import React from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import Carousel1 from "../../../public/2.webp";
-import Carousel2 from "../../../public/3.webp";
-import carousel3 from "../../../public/4.webp";
+import Carousel1 from "../../../public/2.jpg";
+import Carousel2 from "../../../public/3.png";
+import carousel3 from "../../../public/4.jpeg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -61,7 +61,7 @@ const Section1 = () => {
               objectPosition: "center center",
             }}
           />
-          <div className="absolute inset-0 bg-black opacity-20"></div>
+          <div className="absolute inset-0 bg-black opacity-60"></div>
         </div>
         <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[80vh] lg:h-screen">
           <Image
@@ -73,7 +73,7 @@ const Section1 = () => {
               objectPosition: "center center",
             }}
           />
-          <div className="absolute inset-0 bg-black opacity-20"></div>
+          <div className="absolute inset-0 bg-black opacity-60"></div>
         </div>
       </Carousel>
 
@@ -92,7 +92,7 @@ const Section1 = () => {
       </div>
 
       {/* Main Content - Better mobile spacing */}
-      <div className="relative z-[9] m-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20 min-h-[50vh] sm:min-h-[60vh] md:min-h-[80vh] lg:min-h-screen flex items-center justify-center">
+      <div className="relative md:z-[99] z-[9] m-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20 min-h-[50vh] sm:min-h-[60vh] md:min-h-[80vh] lg:min-h-screen flex items-center justify-center">
         <div>
           {/* Left Content */}
           <div className="text-white text-center">
