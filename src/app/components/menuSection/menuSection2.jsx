@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import menuItems from "../../lib/menuItems"; // adjust path if needed
 import { FaShoppingCart } from "react-icons/fa";
+import { Tooltip } from "react-tooltip";
 
 const categories = [
   "All",
@@ -32,7 +33,7 @@ export default function MenuSection2() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedOptions, setSelectedOptions] = useState({}); // { [itemId]: optionLabel }
 
-  const PREVIEW_CHARS = 300;
+  const PREVIEW_CHARS = 70;
 
   // localStorage helpers
   const readCart = () => {
@@ -196,8 +197,8 @@ export default function MenuSection2() {
 
   return (
     <div className="min-h-screen bg-[#f5eadc] relative overflow-hidden" style={{ fontFamily: "unbounded" }}>
-      <div className="relative z-10 max-w-6xl mx-auto px-8 py-8">
-        <div className="text-center mb-8 rounded-lg p-6 mx-4">
+      <div className="relative z-10 max-w-6xl mx-auto md:px-8 px-2 py-8">
+        <div className="text-center mb-8 rounded-lg md:p-6 p-2 md:mx-4 mx-2">
           <h1 className="text-2xl md:text-[32px] font-normal text-black mb-3">Our Menu</h1>
           <p className="text-sm md:text-[32px] text-black mx-auto font-normal leading-relaxed">
             Explore Our Selection Of Authentic Yemeni And Turkish Dishes, Crafted To Offer You The Best Of Both Rich Traditions.
@@ -265,24 +266,42 @@ export default function MenuSection2() {
 
                 <h3 className="font-semibold text-sm mb-2 text-gray-800 uppercase">{item.name}</h3>
 
-                {item.description && (
-                  <div className="mb-3 flex-grow text-sm text-gray-600">
-                    {item.description.length > PREVIEW_CHARS
-                      ? `${item.description.substring(0, PREVIEW_CHARS)}...`
-                      : item.description}
+          
 
-                    {item.description.length > PREVIEW_CHARS && (
-                      <button
-                        onClick={() => alert(item.description)}
-                        className="ml-2 text-[#C98D45] underline text-xs"
-                      >
-                        Read more
-                      </button>
-                    )}
-                  </div>
-                )}
 
-                <div className="mt-auto space-y-3">
+{item.description && (
+  <div className="md:mb-3 mb-2 flex-grow text-xs md:text-sm text-gray-600">
+    {item.description.length > PREVIEW_CHARS
+      ? `${item.description.substring(0, PREVIEW_CHARS)}...`
+      : item.description}
+    {item.description.length > PREVIEW_CHARS && (
+      <>
+        <button
+          data-tooltip-id={`description-${item.id}`}
+          data-tooltip-content={item.description}
+          className="ml-2 text-[#C98D45] underline text-xs"
+        >
+          Read more
+        </button>
+        <Tooltip
+          id={`description-${item.id}`}
+          place="top"
+          className="max-w-xs z-50"
+          style={{
+            backgroundColor: '#333',
+            color: '#fff',
+            borderRadius: '4px',
+            padding: '8px 12px',
+            fontSize: '12px',
+            lineHeight: '1.4'
+          }}
+        />
+      </>
+    )}
+  </div>
+)}
+
+                <div className="md:mt-auto mt-0 space-y-3">
                   <div className="text-[#C98D45] font-normal text-xs">
                     {formatPrice(item)}
                   </div>
