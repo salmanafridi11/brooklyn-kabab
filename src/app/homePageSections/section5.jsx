@@ -32,7 +32,7 @@ const Section5 = () => {
       return true;
     }
 
-    return "Time must be between 12:00 PM and 2:00 AM";
+    return "Time must be between 12:00 PM and 2:00 AM.  ";
   };
 
   const onSubmit = async (data) => {
