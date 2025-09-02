@@ -188,6 +188,9 @@ function CartPageContent() {
     return sum + price * entry.qty;
   }, 0);
 
+  const taxAmount = subtotal * 0.08;
+  const total = subtotal + taxAmount;
+
   if (!ready) return null;
 
   const handleCheckout = async () => {
@@ -212,7 +215,9 @@ function CartPageContent() {
             category: item?.category,
           };
         }),
-        total: subtotal,
+        subtotal: subtotal,
+        tax: taxAmount,
+        total: total,
         totalItems: cart.reduce((sum, entry) => sum + entry.qty, 0),
         orderDate: new Date().toISOString(),
       };
@@ -285,32 +290,34 @@ function CartPageContent() {
 
   return (
     <div
-      className="min-h-screen bg-center bg-cover bg-no-repeat p-6"
+      className="min-h-screen bg-center bg-cover bg-no-repeat p-3 sm:p-6"
       style={{
         backgroundImage: `url(${Img.src})`,
         fontFamily: "unbounded",
       }}
     >
-      <div className="max-w-4xl min-h-[700px] mx-auto bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-[#C98D45]/10 p-8">
-        <div className="flex items-center justify-between mb-6">
+      <div className="max-w-4xl min-h-[700px] mx-auto bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl border border-[#C98D45]/10 p-4 sm:p-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
           <h1 className="text-sm font-bold flex gap-3 items-center text-[#C98D45] drop-shadow-sm">
             <FaShoppingCart className="text-[#C98D45] text-sm drop-shadow-sm" />
             Your Cart
           </h1>
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3 w-full sm:w-auto">
             <button
               onClick={() => router.push("/menu")}
-              className="px-4 py-2 text-xs cursor-pointer border-2 border-[#C98D45] hover:text-white text-[#C98D45] bg-white/90 hover:bg-[#C98D45] flex gap-2 items-center rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-medium"
+              className="px-3 sm:px-4 py-2 text-xs cursor-pointer border-2 border-[#C98D45] hover:text-white text-[#C98D45] bg-white/90 hover:bg-[#C98D45] flex gap-1 sm:gap-2 items-center rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-medium flex-1 sm:flex-none justify-center"
             >
-              <IoMdArrowBack className="text-lg" />
-              Back to Menu
+              <IoMdArrowBack className="text-base sm:text-lg" />
+              <span className="hidden sm:inline">Back to Menu</span>
+              <span className="sm:hidden">Back</span>
             </button>
             <button
               onClick={clearCart}
-              className="px-4 py-2 text-xs cursor-pointer border-2 border-[#C98D45] hover:text-white text-[#C98D45] bg-white/90 hover:bg-[#C98D45] flex gap-2 items-center rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-medium"
+              className="px-3 sm:px-4 py-2 text-xs cursor-pointer border-2 border-[#C98D45] hover:text-white text-[#C98D45] bg-white/90 hover:bg-[#C98D45] flex gap-1 sm:gap-2 items-center rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl font-medium flex-1 sm:flex-none justify-center"
             >
-              <MdRemoveShoppingCart className="text-lg" />
-              Clear Cart
+              <MdRemoveShoppingCart className="text-base sm:text-lg" />
+              <span className="hidden sm:inline">Clear Cart</span>
+              <span className="sm:hidden">Clear</span>
             </button>
           </div>
         </div>
@@ -374,9 +381,9 @@ function CartPageContent() {
                 return (
                   <div
                     key={entry.cartItemId}
-                    className="flex items-start gap-5 border border-[#C98D45]/20 rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 bg-white/80 backdrop-blur-sm hover:border-[#C98D45]/40 group"
+                    className="flex flex-col sm:flex-row items-start gap-4 sm:gap-5 border border-[#C98D45]/20 rounded-2xl p-4 sm:p-6 hover:shadow-2xl transition-all duration-300 bg-white/80 backdrop-blur-sm hover:border-[#C98D45]/40 group"
                   >
-                    <div className="w-24 h-24 rounded-xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:shadow-xl transition-shadow duration-300 mx-auto sm:mx-0">
                       <Image
                         src={item.img}
                         alt={item.name}
@@ -386,23 +393,23 @@ function CartPageContent() {
                       />
                     </div>
 
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <div className="font-bold text-sm text-gray-800 mb-1">
+                    <div className="flex-1 w-full">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between mb-4 gap-2 sm:gap-0">
+                        <div className="w-full sm:w-auto">
+                          <div className="font-bold text-sm text-gray-800 mb-1 text-center sm:text-left">
                             {item.name}
                           </div>
                           <div className="text-sm text-[#C98D45]/80 font-medium bg-[#C98D45]/10 px-3 py-1 rounded-full inline-block mb-2">
                             {item.category}
                           </div>
                           {entry.selectedOption && (
-                            <div className="text-xs text-[#C98D45] font-semibold bg-[#C98D45]/20 px-3 py-1 rounded-lg inline-block">
+                            <div className="text-xs text-[#C98D45] font-semibold bg-[#C98D45]/20 px-3 py-1 rounded-lg inline-block block sm:inline-block">
                               {entry.selectedOption}
                             </div>
                           )}
                         </div>
-                        <div className="text-right">
-                          <div className="font-bold text-[#C98D45] text-xs drop-shadow-sm">
+                        <div className="text-center sm:text-right w-full sm:w-auto">
+                          <div className="font-bold text-[#C98D45] text-sm sm:text-xs drop-shadow-sm">
                             ${(Number(entry.price ?? 0) * entry.qty).toFixed(2)}
                           </div>
                           <div className="text-xs text-gray-500 font-medium">
@@ -429,7 +436,7 @@ function CartPageContent() {
                                 selectedOption.price
                               );
                             }}
-                            className="border-2 border-[#C98D45]/30 rounded-xl px-4 py-2 text-xs bg-white/90 min-w-[140px] focus:border-[#C98D45] focus:outline-none transition-colors shadow-sm hover:shadow-md font-medium"
+                            className="border-2 border-[#C98D45]/30 rounded-xl px-4 py-2 text-xs bg-white/90 w-full sm:min-w-[140px] sm:w-auto focus:border-[#C98D45] focus:outline-none transition-colors shadow-sm hover:shadow-md font-medium"
                           >
                             {options.map((option) => (
                               <option key={option.label} value={option.label}>
@@ -441,7 +448,7 @@ function CartPageContent() {
                       )}
 
                       {/* Quantity Controls */}
-                      <div className="flex items-center gap-4">
+                      <div className="flex flex-col sm:flex-row items-center gap-4 justify-center sm:justify-start">
                         <div className="flex items-center gap-3">
                           <button
                             className="cursor-pointer w-10 h-10 bg-gradient-to-br from-[#C98D45]/20 to-[#C98D45]/10 rounded-full flex items-center justify-center hover:from-[#C98D45]/30 hover:to-[#C98D45]/20 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-bold text-[#C98D45] text-lg"
@@ -477,29 +484,35 @@ function CartPageContent() {
               })}
             </div>
 
-            <div className="flex items-center justify-between pt-8 border-t-2 border-gradient-to-r from-[#C98D45]/20 via-[#C98D45]/40 to-[#C98D45]/20 bg-gradient-to-r from-[#C98D45]/5 via-white to-[#C98D45]/5 p-6 rounded-2xl shadow-lg">
-              <div>
+            <div className="flex flex-col sm:flex-row items-center justify-between pt-6 sm:pt-8 border-t-2 border-gradient-to-r from-[#C98D45]/20 via-[#C98D45]/40 to-[#C98D45]/20 bg-gradient-to-r from-[#C98D45]/5 via-white to-[#C98D45]/5 p-4 sm:p-6 rounded-2xl shadow-lg gap-4 sm:gap-0">
+              <div className="text-center sm:text-left">
                 <div className="text-sm text-gray-600 font-medium mb-1">
                   Total Items: {cart.reduce((sum, entry) => sum + entry.qty, 0)}
                 </div>
+                <div className="text-sm text-gray-600 font-medium mb-1">
+                  Subtotal: ${subtotal.toFixed(2)}
+                </div>
+                <div className="text-sm text-gray-600 font-medium mb-2">
+                  Tax (8%): ${taxAmount.toFixed(2)}
+                </div>
                 <div className="text-lg font-bold text-[#C98D45] drop-shadow-sm">
-                  ${subtotal.toFixed(2)}
+                  Total: ${total.toFixed(2)}
                 </div>
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
                 <button
                   onClick={() => router.push("/menu")}
-                  className="text-xs cursor-pointer px-6 py-3 bg-gray-100/90 hover:bg-gray-200 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-medium text-gray-700"
+                  className="text-xs cursor-pointer px-4 sm:px-6 py-3 bg-gray-100/90 hover:bg-gray-200 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-medium text-gray-700 order-2 sm:order-1"
                 >
                   Continue Shopping
                 </button>
                 <button
                   onClick={handleCheckout}
                   disabled={isCheckoutLoading}
-                  className="text-xs cursor-pointer flex gap-3 items-center px-8 py-3 bg-gradient-to-r from-[#C98D45] to-[#B8935A] text-white rounded-xl hover:from-[#B8935A] hover:to-[#A67B47] transition-all duration-300 font-semibold shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="text-xs cursor-pointer flex gap-2 sm:gap-3 items-center justify-center px-6 sm:px-8 py-3 bg-gradient-to-r from-[#C98D45] to-[#B8935A] text-white rounded-xl hover:from-[#B8935A] hover:to-[#A67B47] transition-all duration-300 font-semibold shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed order-1 sm:order-2"
                 >
-                  <MdOutlineShoppingCartCheckout className="text-xl" />
+                  <MdOutlineShoppingCartCheckout className="text-lg sm:text-xl" />
                   {isCheckoutLoading ? "Processing..." : "Proceed to Checkout"}
                 </button>
               </div>
