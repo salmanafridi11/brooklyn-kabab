@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
       <body className={`antialiased`}>
         {/* <Header /> */}
         {/* {children} */}
-   <h1>Coming soon</h1>
+        <h1 className="text-center text-2xl">PAY YOUR EMPLOYEES AND STOP THREATENING THEM</h1>
 
         {/* <Footer />
          <ToastContainer /> */}
